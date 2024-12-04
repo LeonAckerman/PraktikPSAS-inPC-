@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan PSAT membuat Website Pribadi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <marquee>
+            <h1>Selamat Datang di Website Saya</h1>
+        </marquee>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showSection('home')">Home</a></li>
+                <li><a href="#" onclick="showSection('biodata')">Biodata</a></li>
+                <li><a href="#" onclick="showSection('pendidikan')">Pendidikan</a></li>
+                <li><a href="#" onclick="showSection('jadwal')">Jadwal Mapel</a></li>
+                <li><a href="#" onclick="showSection('aktivitas')">Aktivitas</a></li>
+                <li><a href="#" onclick="showSection('pencapaian')">Pencapaian</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="active">
+        <h2>Home</h2>
+        <p>Assalamualaikum, Nama saya Muhamad Zulfi Ridwan. Saya seorang pelajar SMK dengan minat di bidang Rekayasa Perangkat Lunak. 
+        Di sini saya membuat contoh website pribadi dengan gabungan syntax HTML, CSS, dan JavaScript. Tentunya dengan bantuan materi sebelumnya yang saya pelajari di sekolah dengan bapak Taufik, dan sedikit informasi yang saya dapatkan di internet..</p>
+     <br>
+       <p> Puji syukur saya panjatkan kepada Allah SWT yang telah memberikan rahmat dan karunianya, shalawat serta salam semoga tercurah kepada Rasulullah SAW, sehingga saya dapat menyelesaikan praktek PSAT ini yang berjudul "Praktek PSAT MEMBUAT WEBSITE PRIBADI".</p> 
+     <br>
+       <p>Saya sadar bahwa website yang susun ini masih belum sempurna. Oleh karena itu, dengan rendah hati saya memohon kritik dan saran yang membangun dari pa taufik atau pembaca lainnya untuk penyempurnaan website ini.</p>
+     <br>
+       <p>Sekian dan Terimakasih</p>
+    </section>
+
+    <section id="biodata">
+        <h2>Biodata</h2>
+        <div class="biodata-container">
+            <table>
+                <tr>
+                    <th>Nama Lengkap</th>
+                    <td>Muhamad Zulfi Ridwan</td>
+                </tr>
+                <tr>
+                    <th>Tempat/Tanggal Lahir</th>
+                    <td>Tasikmalaya / 5</td>
+                </tr>
+                <tr>
+                    <th>Jenis Kelamin</th>
+                    <td>Laki-laki</td>
+                </tr>
+                <tr>
+                    <th>Alamat</th>
+                    <td>Jl. Lewobabakan</td>
+                </tr>
+                <tr>
+                    <th>Agama</th>
+                    <td>Islam</td>
+                </tr>
+                <tr>
+                    <th>Anak Ke</th>
+                    <td>Dua dari tiga bersaudara</td>
+                </tr>
+                <tr>
+                    <th>No Telepon</th>
+                    <td>083103904585</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <section id="pendidikan">
+        <h2>Pendidikan</h2>
+        <ul>
+            <li>SD: SDN Lewo 2 (2014-2020)</li>
+            <li>SMP: SMPN 6 TSM (2020-2023)</li>
+            <li>SMK: SMK ARTANITA (sekarang)</li>
+            <li>Pelatihan/Training: Program Latihan Singkat Microsoft Office di Kampus LP3I</li>
+        </ul>
+    </section>
+
+    <section id="jadwal">
+        <h2>Jadwal Pelajaran XI RPL</h2>
+          <table>
+            <thead>
+                <tr>
+                    <th>Hari</th>
+                    <th>Kode - Mata Pelajaran</th>
+                    <th>Guru</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="4">Senin</td>
+                    <td>12a - BK</td>
+                    <td>Bu Yanti</td>
+                </tr>
+                <tr>
+                    <td>18c - PBO</td>
+                    <td>Bu Alin</td>
+                </tr>
+                <tr>
+                    <td>14 - MTK</td>
+                    <td>Bu Rima</td>
+                </tr>
+                <tr>
+                    <td>19a - PKK</td>
+                    <td>Bu Sri</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Selasa</td>
+                    <td>12a - BK</td>
+                    <td>Bu Yanti</td>
+                </tr>
+                <tr>
+                    <td>02 - B.Inggris</td>
+                    <td>Bu Lis</td>
+                </tr>
+                <tr>
+                    <td>05 - PAI</td>
+                    <td>Bu Nining</td>
+                </tr>
+                <tr>
+                    <td>19a - PKK</td>
+                    <td>Bu Sri</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Rabu</td>
+                    <td>15 - PWPB</td>
+                    <td>Pa Taufik</td>
+                </tr>
+                <tr>
+                    <td>12c - PPKN</td>
+                    <td>Bu Yanti</td>
+                </tr>
+                <tr>
+                    <td>19a - PKK</td>
+                    <td>Bu Sri</td>
+                </tr>
+                <tr>
+                    <td>07a - B.Indo</td>
+                    <td>Bu Indi</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">Kamis</td>
+                    <td>15 - PWPB</td>
+                    <td>Pa Taufik</td>
+                </tr>
+                <tr>
+                    <td>18b - Basis Data</td>
+                    <td>Bu Alin</td>
+                </tr>
+                <tr>
+                    <td>18c - PBO</td>
+                    <td>Bu Alin</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">Jumat</td>
+                    <td>13c - PPL</td>
+                    <td>Bu Dina</td>
+                </tr>
+                <tr>
+                    <td>14 - MTK</td>
+                    <td>Bu Rima</td>
+                </tr>
+                <tr>
+                    <td>17 - Penjas</td>
+                    <td>Pa Wildan</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="aktivitas">
+        <h2>Aktivitas</h2>
+        <p>Keseharian saya tidak begitu padat dan kompleks. Kadang ikut kerja dengan bapak, dan jika tidak ada pekerjaan saya menghabiskan waktu dengan bermain Game, menonton film/anime atau belajar sedikit-sedikit mengenai tag HTML dan command codingan.
+           Kadang juga bermain badminton dengan anak² ekskul, atau ke GYM bersama Aries dan Ade.</p>
+    </section>
+
+    <section id="pencapaian">
+     <h2>Pencapaian</h2>
+  <p>Berikut adalah pencapaian yang telah saya raih:</p>
+  <div class="achievement-container">
+    <div class="achievement-item">
+      <img src="sertifikat.jpg" alt="Sertifikat">
+      <h3>Sertifikat LP3I</h3>
+      <p>Diperoleh saat mengikuti program pembelajaran  Microsoft office di tahun 2023.</p>
+    </div>
+  
+    <div class="achievement-item">
+      <img src="keterangan.jpg" alt="Keterangan Materi">
+      <h3>Keterangan Pembelajaran LP3I</h3>
+      <p>Detail praktek materi yang saya pelajari.</p>
+    </div>
+ 
+    <div class="achievement-item">
+      <img src="quiz.jpg" alt="Penghargaan Juara Quiz">
+      <h3>Perlombaan Quiz LP3I</h3>
+      <p>Juara 2 Quiz Microsoft office di kampus LP3I.</p>
+    </div>
+
+  <div class="achievement-item">
+      <img src="pramuka.jpg" alt="Kegiatan kemah">
+      <h3>Gerakan Pramuka</h3>
+      <p>Mengikuti kegiatan Perkemahan Masa Tamu.</p>
+    </div>
+
+ <div class="achievement-item">
+      <img src="KII.jpg" alt="Kunjungan Industri">
+      <h3>Kunjungan Industri/Instansi</h3>
+      <p>Mengikuti kunjungan industri SMK Artanita ke Robotic Education Yogyakarta, Universitas Muhammadiyah Yogyakarta, dan Bakpia Jogkem.</p>
+    </div>
+</section>
+
+    <footer>
+        <p>&copy; 2024 Muhamad Zulfi Ridwan. Semua Hak Dilindungi.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
