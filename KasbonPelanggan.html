@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasbon Pelanggan - Toserba</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar - sama persis dengan dashboard */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-menu {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            margin: 0.5rem 1rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #fff;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link.active::before {
+            transform: scaleY(1);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.shifted {
+            margin-left: 280px;
+        }
+
+        /* Topbar - sama persis dengan dashboard */
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background: #f8f9fa;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #666;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .notification-btn:hover {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .user-info:hover {
+            background: #e9ecef;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #7f8c8d;
+        }
+
+        .add-btn {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Stats Cards - sama dengan dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .stat-change.positive {
+            color: #27ae60;
+        }
+
+        .stat-change.negative {
+            color: #e74c3c;
+        }
+
+        /* Search and Filter */
+        .controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #adb5bd;
+        }
+
+        .filter-select {
+            padding: 0.8rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Kasbon Table */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f1f3f4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .kasbon-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .kasbon-table th,
+        .kasbon-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .kasbon-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .kasbon-table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .kasbon-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-aktif {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-lunas {
+            background: #d1edff;
+            color: #0c5460;
+        }
+
+        .status-overdue {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #adb5bd;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #495057;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        /* Overlay for mobile */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive - sama dengan dashboard */
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 1rem;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .controls-row {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .user-info span {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .kasbon-table {
+                font-size: 0.9rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar {
+                position: relative;
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 280px;
+            }
+
+            .overlay {
+                display: none;
+            }
+        }
+
+        /* Color schemes - sama dengan dashboard */
+        .bg-blue { background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); }
+        .bg-green { background: linear-gradient(45deg, #56ab2f 0%, #a8e6cf 100%); }
+        .bg-orange { background: linear-gradient(45deg, #ff9a56 0%, #ffad56 100%); }
+        .bg-red { background: linear-gradient(45deg, #ff6b6b 0%, #ee5a52 100%); }
+        .bg-purple { background: linear-gradient(45deg, #a8edea 0%, #fed6e3 100%); }
+        .bg-teal { background: linear-gradient(45deg, #20bf6b 0%, #26d0ce 100%); }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-store"></i>
+                    <span>Asean
+                </div>
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="Inventory.html" class="nav-link">
+                        <i class="fas fa-boxes"></i>
+                        <span>Inventory</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="fas fa-cash-register"></i>
+                        <span>Kasbon Pelanggan</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="LaporanKeuangan.html" class="nav-link">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span>Laporan Keuangan</span>
+                    </a>
+                </div>
+        
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Topbar -->
+            <header class="topbar">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="topbar-right">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <div class="user-info">
+                        <div class="user-avatar">A</div>
+                        <span>Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <main class="content">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Kasbon Pelanggan</h1>
+                        <p class="page-subtitle">Kelola kasbon dan pembayaran pelanggan</p>
+                    </div>
+                    <button class="add-btn" id="addKasbonBtn">
+                        <i class="fas fa-plus"></i>
+                        Tambah Kasbon
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Total Kasbon Aktif</div>
+                            <div class="stat-icon bg-orange">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">15</div>
+                        <div class="stat-change">
+                            <i class="fas fa-users"></i>
+                            <span>15 pelanggan</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Total Nominal</div>
+                            <div class="stat-icon bg-red">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">Rp 850K</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>Menunggu pembayaran</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Overdue</div>
+                            <div class="stat-icon bg-red">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-clock"></i>
+                            <span>Perlu tindak lanjut</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Lunas Bulan Ini</div>
+                            <div class="stat-icon bg-green">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+20% dari bulan lalu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search and Filter -->
+                <div class="controls">
+                    <div class="controls-row">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Cari nama pelanggan..." id="searchInput">
+                        </div>
+                        <select class="filter-select" id="statusFilter">
+                            <option value="">Semua Status</option>
+                            <option value="aktif">Aktif</option>
+                            <option value="overdue">Overdue</option>
+                            <option value="lunas">Lunas</option>
+                        </select>
+                        <select class="filter-select" id="sortFilter">
+                            <option value="terbaru">Terbaru</option>
+                            <option value="terlama">Terlama</option>
+                            <option value="nominal_tinggi">Nominal Tertinggi</option>
+                            <option value="nominal_rendah">Nominal Terendah</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Kasbon Table -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-list"></i>
+                            Daftar Kasbon Pelanggan
+                        </div>
+                    </div>
+                    
+                    <table class="kasbon-table">
+                        <thead>
+                            <tr>
+                                <th>Nama Pelanggan</th>
+                                <th>Nominal</th>
+                                <th>Tanggal Kasbon</th>
+                                <th>Jatuh Tempo</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ibu Sari Dewi</td>
+                                <td>Rp 150,000</td>
+                                <td>12 Agu 2025</td>
+                                <td>19 Agu 2025</td>
+                                <td><span class="status-badge status-aktif">Aktif</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success" onclick="bayarKasbon('Ibu Sari Dewi')">
+                                            <i class="fas fa-check"></i>
+                                            Bayar
+                                        </button>
+                                        <button class="btn btn-primary" onclick="editKasbon('Ibu Sari Dewi')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-danger" onclick="hapusKasbon('Ibu Sari Dewi')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Pak Budi Santoso</td>
+                                <td>Rp 75,000</td>
+                                <td>10 Agu 2025</td>
+                                <td>15 Agu 2025</td>
+                                <td><span class="status-badge status-overdue">Overdue</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success" onclick="bayarKasbon('Pak Budi Santoso')">
+                                            <i class="fas fa-check"></i>
+                                            Bayar
+                                        </button>
+                                        <button class="btn btn-primary" onclick="editKasbon('Pak Budi Santoso')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-danger" onclick="hapusKasbon('Pak Budi Santoso')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ibu Maya Putri</td>
+                                <td>Rp 200,000</td>
+                                <td>08 Agu 2025</td>
+                                <td>15 Agu 2025</td>
+                                <td><span class="status-badge status-lunas">Lunas</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-primary" onclick="lihatDetail('Ibu Maya Putri')">
+                                            <i class="fas fa-eye"></i>
+                                            Detail
+                                        </button>
+                                        <button class="btn btn-danger" onclick="hapusKasbon('Ibu Maya Putri')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Pak Ahmad Wijaya</td>
+                                <td>Rp 300,000</td>
+                                <td>11 Agu 2025</td>
+                                <td>18 Agu 2025</td>
+                                <td><span class="status-badge status-aktif">Aktif</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success" onclick="bayarKasbon('Pak Ahmad Wijaya')">
+                                            <i class="fas fa-check"></i>
+                                            Bayar
+                                        </button>
+                                        <button class="btn btn-primary" onclick="editKasbon('Pak Ahmad Wijaya')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-danger" onclick="hapusKasbon('Pak Ahmad Wijaya')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ibu Rina Sari</td>
+                                <td>Rp 125,000</td>
+                                <td>09 Agu 2025</td>
+                                <td>14 Agu 2025</td>
+                                <td><span class="status-badge status-overdue">Overdue</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-success" onclick="bayarKasbon('Ibu Rina Sari')">
+                                            <i class="fas fa-check"></i>
+                                            Bayar
+                                        </button>
+                                        <button class="btn btn-primary" onclick="editKasbon('Ibu Rina Sari')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-danger" onclick="hapusKasbon('Ibu Rina Sari')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Tambah/Edit Kasbon -->
+    <div class="modal" id="kasbonModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Tambah Kasbon Baru</h3>
+                <button class="close-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="kasbonForm">
+                <div class="form-group">
+                    <label class="form-label">Nama Pelanggan</label>
+                    <input type="text" class="form-input" id="namaPelanggan" placeholder="Masukkan nama pelanggan" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nominal Kasbon</label>
+                    <input type="number" class="form-input" id="nominalKasbon" placeholder="Masukkan nominal kasbon" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tanggal Kasbon</label>
+                    <input type="date" class="form-input" id="tanggalKasbon" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Jatuh Tempo</label>
+                    <input type="date" class="form-input" id="jatuhTempo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Catatan (Opsional)</label>
+                    <textarea class="form-input" id="catatan" rows="3" placeholder="Catatan tambahan"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Kasbon</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar dan menu toggle - sama dengan dashboard
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        menuToggle.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', closeSidebar);
+
+        // Navigation links
+       
+        link.addEventListener('click', (e) => {
+    navLinks.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+
+    // Tutup sidebar
+    closeSidebar();
+
+    // Setelah sidebar tutup, biarkan browser navigasi
+    window.location.href = link.href;
+});
+
+        // Auto close sidebar on window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                closeSidebar();
+            }
+        });
+
+        // Modal functions
+        const modal = document.getElementById('kasbonModal');
+        const addKasbonBtn = document.getElementById('addKasbonBtn');
+        const closeModal = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const kasbonForm = document.getElementById('kasbonForm');
+        const modalTitle = document.getElementById('modalTitle');
+
+        function showModal(title = 'Tambah Kasbon Baru') {
+            modal.classList.add('active');
+            modalTitle.textContent = title;
+        }
+
+        function hideModal() {
+            modal.classList.remove('active');
+            kasbonForm.reset();
+        }
+
+        addKasbonBtn.addEventListener('click', () => showModal());
+        closeModal.addEventListener('click', hideModal);
+        cancelBtn.addEventListener('click', hideModal);
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideModal();
+            }
+        });
+
+        // Form submission
+        kasbonForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = {
+                nama: document.getElementById('namaPelanggan').value,
+                nominal: document.getElementById('nominalKasbon').value,
+                tanggal: document.getElementById('tanggalKasbon').value,
+                jatuhTempo: document.getElementById('jatuhTempo').value,
+                catatan: document.getElementById('catatan').value
+            };
+            
+            alert(`Kasbon berhasil disimpan!\n\nNama: ${formData.nama}\nNominal: Rp ${parseInt(formData.nominal).toLocaleString('id-ID')}\nTanggal: ${formData.tanggal}\nJatuh Tempo: ${formData.jatuhTempo}`);
+            hideModal();
+        });
+
+        // Action buttons functions
+        function bayarKasbon(nama) {
+            if (confirm(`Apakah Anda yakin ingin menandai kasbon ${nama} sebagai LUNAS?`)) {
+                alert(`Kasbon ${nama} berhasil ditandai sebagai LUNAS!`);
+                // Di sini nanti akan ada logic untuk update status ke database
+            }
+        }
+
+        function editKasbon(nama) {
+            showModal(`Edit Kasbon - ${nama}`);
+            // Di sini nanti akan ada logic untuk load data kasbon ke form
+        }
+
+        function hapusKasbon(nama) {
+            if (confirm(`Apakah Anda yakin ingin menghapus kasbon ${nama}?\n\nTindakan ini tidak dapat dibatalkan!`)) {
+                alert(`Kasbon ${nama} berhasil dihapus!`);
+                // Di sini nanti akan ada logic untuk delete dari database
+            }
+        }
+
+        function lihatDetail(nama) {
+            alert(`Detail Kasbon ${nama}:\n\n- Status: Lunas\n- Tanggal Bayar: 13 Agu 2025\n- Metode Pembayaran: Tunai\n- Catatan: Pembayaran tepat waktu`);
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.kasbon-table tbody tr');
+            
+            rows.forEach(row => {
+                const nama = row.cells[0].textContent.toLowerCase();
+                if (nama.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter functionality
+        const statusFilter = document.getElementById('statusFilter');
+        statusFilter.addEventListener('change', (e) => {
+            const filterValue = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.kasbon-table tbody tr');
+            
+            rows.forEach(row => {
+                if (filterValue === '') {
+                    row.style.display = '';
+                } else {
+                    const status = row.cells[4].textContent.toLowerCase();
+                    if (status.includes(filterValue)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        // Notification handler
+        document.querySelector('.notification-btn').addEventListener('click', () => {
+            alert('3 notifikasi baru:\n1. Kasbon Pak Budi sudah overdue\n2. Kasbon Ibu Rina perlu tindak lanjut\n3. Pembayaran kasbon Ibu Maya diterima');
+        });
+
+        // Set default date untuk form
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tanggalKasbon').value = today;
+            
+            // Set jatuh tempo 7 hari dari sekarang
+            const nextWeek = new Date();
+            nextWeek.setDate(nextWeek.getDate() + 7);
+            document.getElementById('jatuhTempo').value = nextWeek.toISOString().split('T')[0];
+        });
+    </script>
+</body>
+</html>
